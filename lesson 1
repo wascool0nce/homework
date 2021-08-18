@@ -1,0 +1,97 @@
+#1. Реализовать вывод информации о промежутке времени в зависимости от его продолжительности duration в секундах:
+# до минуты: <s> сек;
+# * до часа: <m> мин <s> сек;
+# * до суток: <h> час <m> мин <s> сек;
+# * *до месяца, до года, больше года: по аналогии.
+
+user_number = int(input("Введите любое целое число: "))
+if user_number < 60:
+    print(user_number, 'сек')
+elif user_number <= 3600:
+    min = user_number // 60
+    sec = user_number % 60
+    print(min, 'мин', sec, 'сек')
+elif user_number <= 86400:
+    hour = user_number // 3600
+    min = user_number // 60 % 60
+    sec = user_number % 60
+    print(hour,'час', min, 'мин', sec, 'сек')
+elif user_number <= 2592000:
+    days = user_number // 86400
+    hour = user_number // 3600 % 24
+    min = user_number // 60 % 60
+    sec = user_number % 60
+    print(days,'дн', hour,'час', min, 'мин', sec, 'сек')
+elif user_number <=31104000:
+    month = user_number // 2592000
+    days = user_number // 86400 % 30
+    hour = user_number // 3600 % 24
+    min = user_number // 60 % 60
+    sec = user_number % 60
+    print(month,'мес', days,'дн', hour,'час', min, 'мин', sec, 'сек')
+elif user_number > 31104000:
+    year = user_number // 31104000
+    month = user_number // 2592000 % 12
+    days = user_number // 86400 % 30
+    hour = user_number // 3600 % 24
+    min = user_number // 60 % 60
+    sec = user_number % 60
+    print(year, 'г.', month,'мес', days,'дн', hour,'час', min, 'мин', sec, 'сек')
+
+
+# 2. Создать список, состоящий из кубов нечётных чисел от 0 до 1000:
+# Вычислить сумму тех чисел из этого списка, сумма цифр которых делится нацело на 7. Например, число «19 ^ 3 = 6859» будем включать в сумму, так как 6 + 8 + 5 + 9 = 28 – делится нацело на 7.
+# Внимание: использовать только арифметические операции!
+# * К каждому элементу списка добавить 17 и заново вычислить сумму тех чисел из этого списка, сумма цифр которых делится нацело на 7.
+# Внимание: постарайтесь избежать создания нового списка!!!
+
+
+number_list = []
+totals = []
+
+for number in range(1, 1001):
+    if number % 2:
+        number_list.append(number ** 3)
+
+print(number_list)
+
+result = 0
+for number in number_list:
+    total = 0
+    temp_number = number
+    while number != 0:
+        total += number % 10
+        number //= 10
+    totals.append(total)
+    if total % 7 == 0:
+        result += temp_number
+
+print(result)
+
+#ЗАДАНИЕ СО ЗВЕЗДОЧКОЙ
+#result = 0
+
+#for number in number_list:
+    #total = 0
+    #number += 17
+    #temp_number = number
+    #while number != 0:
+        #total += number % 10
+        #number //= 10
+    #totals.append(total)
+    #if total % 7 == 0:
+        #result += temp_number
+
+#print(result)
+
+
+# 3. Реализовать склонение слова «процент» для чисел до 20. Например, задаем число 5 — получаем «5 процентов», задаем число 2 — получаем «2 процента». Вывести все склонения для проверки.
+
+
+user_numbers = int(input('Введите любое число от 1 до 20: '))
+if user_numbers == 1:
+    print(user_numbers, "процент")
+elif user_numbers > 1 and user_numbers < 5:
+    print(user_numbers, "процента")
+else:
+    print(user_numbers, "процентов")
