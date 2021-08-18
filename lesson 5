@@ -1,0 +1,113 @@
+# 1. Написать функцию email_parse(<email_address>), которая при помощи регулярного выражения извлекает имя пользователя и почтовый домен из email адреса и возвращает их в виде словаря. Если адрес не валиден, выбросить исключение ValueError. Пример:
+# >>> email_parse('someone@geekbrains.ru')
+# {'username': 'someone', 'domain': 'geekbrains.ru'}
+# >>> email_parse('someone@geekbrainsru')
+# Traceback (most recent call last):
+#   File "<stdin>", line 1, in <module>
+#   ...
+#     raise ValueError(msg)
+# ValueError: wrong email: someone@geekbrainsru
+# Примечание: подумайте о возможных ошибках в адресе и постарайтесь учесть их в регулярном выражении; имеет ли смысл в данном случае использовать функцию re.compile()?
+
+
+import re
+
+email_dict = {}
+
+
+def email_parse(email_adress):
+    try:
+        re_email = re.compile(r'(\w*)@(w*[A-Za-z0-9.]+)')
+        assert re_email.search(email_adress)
+    except AssertionError:
+        raise ValueError(f'wrong email: {email_adress}')
+    else:
+        re_username = re.compile(r'(\w*)@')
+        re_domen = re.compile(r'@(w*[A-Za-z0-9.]+)')
+        username = re_username.search(email_adress)
+        domen = re_domen.search(email_adress)
+        email_dict['username'] = username[0][:-1]
+        email_dict['domen'] = domen[0][1:]
+        return email_dict
+
+
+print(email_parse('someone@geekbrains.ru'))
+
+
+# 3. Написать декоратор для логирования типов позиционных аргументов функции, например:
+# def type_logger...
+#     ...
+#
+#
+# @type_logger
+# def calc_cube(x):
+#    return x ** 3
+#
+# >>> a = calc_cube(5)
+# 5: <class 'int'>
+# Примечание: если аргументов несколько - выводить данные о каждом через запятую; можете ли вы вывести тип значения функции? Сможете ли решить задачу для именованных аргументов? Сможете ли вы замаскировать работу декоратора? Сможете ли вывести имя функции, например, в виде:
+# >>> a = calc_cube(5)
+# calc_cube(5: <class 'int'>)
+
+
+def type_logger(func):
+    print(func.__name__, end=' (')
+
+    def logger(*args):
+        s = ''
+        for _ in args:
+            s += f'{_}: {type(_)}, '
+        s = s[:-2] + ')'
+        return s
+
+    return logger
+
+
+@type_logger
+def calc_cube(x, y):
+    return x ** int(y)
+
+
+result = calc_cube(5, '5')
+print(result)
+
+
+# 4. Написать декоратор с аргументом-функцией (callback), позволяющий валидировать входные значения функции и выбрасывать исключение ValueError, если что-то не так, например:
+# def val_checker...
+#     ...
+# @val_checker(lambda x: x > 0)
+# def calc_cube(x):
+#    return x ** 3
+#
+# >>> a = calc_cube(5)
+# 125
+# >>> a = calc_cube(-5)
+# Traceback (most recent call last):
+#   ...
+#     raise ValueError(msg)
+# ValueError: wrong val -5
+# Примечание: сможете ли вы замаскировать работу декоратора?
+
+
+def val_cheсker(verbosity=0):
+    def get_num(func):
+        def validator(*args):
+            num = func(*args)
+            if verbosity(num):
+                return num
+            else:
+                raise ValueError(f'wrong val {args}')
+            return num
+        return validator
+    return get_num
+
+
+@val_cheсker(lambda x: x > 0)
+def calc_cube(x):
+    return x ** 3
+
+
+result = calc_cube(-5)
+print(result)
+
+
